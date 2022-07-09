@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import './App.css';
 import Axios from 'axios';
-import { Button } from 'antd';
+import { Button, Form, Input } from 'antd';
 
 function App() {
 
@@ -9,6 +9,47 @@ function App() {
   const [usersEmail, setUsersEmail] = useState('')
   const [createAt, setCreateAt] = useState('')
   const [usersList, setUsersList] = useState([])
+
+  // CONSTS ANTD
+
+  const formItemLayout = {
+    labelCol: {
+      span: 8,
+    },
+    wrapperCol: {
+      span: 8,
+    },
+  };
+  const formTailLayout = {
+    labelCol: {
+      span: 4,
+    },
+    wrapperCol: {
+      span: 8,
+      offset: 4,
+    },
+  };
+
+  const [form] = Form.useForm();
+  const [checkNick, setCheckNick] = useState(false);
+  useEffect(() => {
+    form.validateFields(['nickname']);
+  }, [checkNick, form]);
+
+  const onCheckboxChange = (e) => {
+    setCheckNick(e.target.checked);
+  };
+
+  const onCheck = async () => {
+    try {
+      const values = await form.validateFields();
+      console.log('Success:', values);
+    } catch (errorInfo) {
+      console.log('Failed:', errorInfo);
+    }
+  };
+
+  // ===============
 
   useEffect(() => {
     Axios.get("http://localhost:3001/api/get").then((response) => {
@@ -27,21 +68,57 @@ function App() {
   return (
     <div className="App">
       <h1>Hello Dom Pedro!</h1>
-      <div className="form">
-        <label htmlFor="">Name</label>
-        <input type="text" name="userName" onChange={(e) => {
+      <Form form={form} name="dynamic_rule">
+        <Form.Item
+          {...formItemLayout}
+          name="username"
+          label="Name"
+          rules={[
+            {
+              required: true,
+              message: 'Please input your name',
+            },
+          ]}
+        >
+          <Input placeholder="Please input your name" onChange={(e) => {
           setUsersName(e.target.value)
         }} />
-        <label htmlFor="">Email</label>
-        <input type="email" name="userEmail" onChange={(e) => {
+        </Form.Item>
+
+        <Form.Item
+          {...formItemLayout}
+          name="useremail"
+          label="Email"
+          rules={[
+            {
+              required: true,
+              message: 'Please input your email',
+            },
+          ]}
+        >
+          <Input placeholder="Please input your email" onChange={(e) => {
           setUsersEmail(e.target.value)
         }} />
-        <label htmlFor="">Create At</label>
-        <input type="date" name="userCreateAt" onChange={(e) => {
+        </Form.Item>
+
+        <Form.Item
+          {...formItemLayout}
+          name="createat"
+          label="Create At"
+          rules={[
+            {
+              required: true,
+              message: 'Please input your create at',
+            },
+          ]}
+        >
+          <Input type="date" placeholder="Please input your create at" onChange={(e) => {
           setCreateAt(e.target.value)
         }} />
-        <Button type="primary" onClick={submitReview} >Submit</Button>
-      </div>
+        </Form.Item>
+      </Form>
+        
+      <Button type="primary" onClick={submitReview} >Submit</Button>
 
       <div className="tablediv">
         <table border="1" className="table">
@@ -73,7 +150,6 @@ function App() {
           </tbody>
         </table>
       </div>
-
     </div>
   );
 }
