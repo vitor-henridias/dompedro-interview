@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import './App.css';
-import Axios from 'axios'
+import Axios from 'axios';
+import { Button } from 'antd';
 
 function App() {
 
@@ -23,11 +24,10 @@ function App() {
     })
   };
 
-
   return (
     <div className="App">
       <h1>Hello Dom Pedro!</h1>
-      <div className='form'>
+      <div className="form">
         <label htmlFor="">Name</label>
         <input type="text" name="userName" onChange={(e) => {
           setUsersName(e.target.value)
@@ -40,13 +40,40 @@ function App() {
         <input type="date" name="userCreateAt" onChange={(e) => {
           setCreateAt(e.target.value)
         }} />
-
-        <button onClick={submitReview} >Submit</button>
-
-        {usersList.map((val) => {
-          return <h1>User Name: {val.usersName} | User Email: {val.usersEmail} | Create At: {val.createAt}</h1>
-        })}
+        <Button type="primary" onClick={submitReview} >Submit</Button>
       </div>
+
+      <div className="tablediv">
+        <table border="1" className="table">
+          <thead className="thead">
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Create At</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{usersList.map((val) => {
+                return <p>{val.idusers}</p>
+              })}
+              </td>
+              <td>{usersList.map((val) => {
+                return <p>{val.usersName}</p>
+              })}
+              </td>
+              <td>{usersList.map((val) => {
+                return <p>{val.usersEmail}</p>
+              })}</td>
+              <td>{usersList.map((val) => {
+                return <p>{val.createAt}</p>
+              })}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
     </div>
   );
 }
