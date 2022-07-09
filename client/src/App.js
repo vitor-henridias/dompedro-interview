@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
 import './App.css';
 import Axios from 'axios';
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, Table } from 'antd';
 
 function App() {
 
+  const [idusers, setIdusers] = useState('')
   const [usersName, setUsersName] = useState('')
   const [usersEmail, setUsersEmail] = useState('')
   const [createAt, setCreateAt] = useState('')
   const [usersList, setUsersList] = useState([])
 
-  // CONSTS ANTD
+  // CONST FORM ANTD
 
   const formItemLayout = {
     labelCol: {
@@ -36,20 +37,42 @@ function App() {
     form.validateFields(['nickname']);
   }, [checkNick, form]);
 
-  const onCheckboxChange = (e) => {
-    setCheckNick(e.target.checked);
-  };
+  // END CONST FORM ANTD
 
-  const onCheck = async () => {
-    try {
-      const values = await form.validateFields();
-      console.log('Success:', values);
-    } catch (errorInfo) {
-      console.log('Failed:', errorInfo);
-    }
-  };
+  // CONST TABLE ANTD 
 
-  // ===============
+  const columns = [
+    {
+      title: 'ID',
+      dataIndex: 'id',
+      render: (number) => <a>{number}</a>,
+    },
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      render: (email) => <a>{email}</a>,
+    },
+    {
+      title: 'Create At',
+      dataIndex: 'createat',
+    },
+  ]
+
+  const data = [
+    {
+      id: '1',
+      name: 'John Brown',
+      email: 'vhsilva.mg@gmail.com',
+      createat: '07/09/2022',
+    },
+  ];
+
+  // END CONST TABLE
 
   useEffect(() => {
     Axios.get("http://localhost:3001/api/get").then((response) => {
@@ -81,8 +104,8 @@ function App() {
           ]}
         >
           <Input placeholder="Please input your name" onChange={(e) => {
-          setUsersName(e.target.value)
-        }} />
+            setUsersName(e.target.value)
+          }} />
         </Form.Item>
 
         <Form.Item
@@ -97,8 +120,8 @@ function App() {
           ]}
         >
           <Input placeholder="Please input your email" onChange={(e) => {
-          setUsersEmail(e.target.value)
-        }} />
+            setUsersEmail(e.target.value)
+          }} />
         </Form.Item>
 
         <Form.Item
@@ -113,12 +136,14 @@ function App() {
           ]}
         >
           <Input type="date" placeholder="Please input your create at" onChange={(e) => {
-          setCreateAt(e.target.value)
-        }} />
+            setCreateAt(e.target.value)
+          }} />
         </Form.Item>
       </Form>
-        
+
       <Button type="primary" onClick={submitReview} >Submit</Button>
+
+      {/* <Table columns={columns} dataSource={data} /> */}
 
       <div className="tablediv">
         <table border="1" className="table">
